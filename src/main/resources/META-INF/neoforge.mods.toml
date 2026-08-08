@@ -1,0 +1,24 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "adaycounter"
+version = "1.0"
+displayName = "Aesthetic Day Counter"
+authors = "Sabian"
+description = '''A simple aesthetically pleasing day counter for Neoforge.'''
+
+[[dependencies.adaycounter]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[21.1,)"
+    ordering = "NONE"
+    side = "CLIENT"
+
+[[dependencies.adaycounter]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[1.21.1,1.21.2)"
+    ordering = "NONE"
+    side = "CLIENT"
