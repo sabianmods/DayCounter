@@ -30,6 +30,8 @@ public final class ClientDayCounterHandler {
     private static long triggeredAtMs = -1;
     private static int lastRevealedChars = -1;
     private static boolean isMilestone = false;
+    private static boolean wasScreenOpen = false;
+    private static long screenOpenedAtMs = -1;
 
     private ClientDayCounterHandler() {}
 
@@ -68,11 +70,26 @@ public final class ClientDayCounterHandler {
 
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent.Post event) {
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.screen != null) {
+            if (!wasScreenOpen) {
+                wasScreenOpen = true;
+                screenOpenedAtMs = System.currentTimeMillis();
+            }
+            return; // don't render or play sound while any menu is open
+        }
+        if (wasScreenOpen) {
+            wasScreenOpen = false;
+            long pausedDuration = System.currentTimeMillis() - screenOpenedAtMs;
+            triggeredAtMs += pausedDuration; // shift the whole timeline forward by however long the menu was open
+        }
+
         if (activeText == null) {
             return;
         }
+        
 
-        Minecraft mc = Minecraft.getInstance();
         long elapsed = System.currentTimeMillis() - triggeredAtMs;
 
         if (elapsed < START_DELAY_MS) {
